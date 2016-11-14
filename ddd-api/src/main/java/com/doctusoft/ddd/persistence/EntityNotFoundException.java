@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import static java.util.Objects.requireNonNull;
 
 @Value
-@ToString(of = "key", doNotUseGetters = true)
-@EqualsAndHashCode(of = "key", doNotUseGetters = true)
+@ToString(callSuper = false, of = "key", doNotUseGetters = true)
+@EqualsAndHashCode(callSuper = false, of = "key", doNotUseGetters = true)
 public class EntityNotFoundException extends IllegalStateException {
     
     @NotNull EntityKey<?> key;
