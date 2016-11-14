@@ -10,7 +10,7 @@ public interface StorageService {
     
     EntityKey<StorageObject> createFile(EntityKey<?> referencingEntity, String category, FileContent fileContent, String mimeType);
     
-    <T extends FileContent> EntityKey<StorageObject> createFileOrArchive(EntityKey<?> referencingEntity, String category, Collection<T> archiveEntries, String mimeType, String archiveBaseName);
+    <T extends FileContent> EntityKey<StorageObject> createFileOrArchive(EntityKey<?> referencingEntity, String category, Collection<T> archiveEntries, String archiveBaseName, String mimeType);
     
     FileDownloadResponse download(EntityKey<StorageObject> key);
     
