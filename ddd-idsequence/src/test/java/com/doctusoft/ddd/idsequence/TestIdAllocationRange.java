@@ -1,9 +1,9 @@
 package com.doctusoft.ddd.idsequence;
 
+import com.doctusoft.java.AnException;
+import com.doctusoft.java.LambdAssert;
 import com.doctusoft.math.ClosedRange;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -16,37 +16,33 @@ import static org.junit.Assert.assertThat;
 
 public final class TestIdAllocationRange {
     
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-    
     @Test
     public void createNegative() {
         long randomLong = 100 + new Random().nextInt(100);
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("range");
-        IdAllocationRange.fromTo(randomLong, randomLong - 1);
+        LambdAssert.assertThrows(
+            () -> IdAllocationRange.fromTo(randomLong, randomLong - 1),
+            AnException.of(IllegalArgumentException.class).and(AnException.withMessageContains("range")));
     }
     
     @Test
     public void createNegativeCount() {
         long randomLong = new Random().nextInt(100);
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("positive");
-        IdAllocationRange.fromCount(randomLong, -1);
+        LambdAssert.assertThrows(
+            () -> IdAllocationRange.fromCount(randomLong, -1),
+            AnException.of(IllegalArgumentException.class).and(AnException.withMessageContains("positive")));
     }
     
     @Test
     public void create0Count() {
         long randomLong = 100 + new Random().nextInt(100);
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("positive");
-        IdAllocationRange.fromCount(randomLong, 0);
+        LambdAssert.assertThrows(
+            () -> IdAllocationRange.fromCount(randomLong, 0),
+            AnException.of(IllegalArgumentException.class).and(AnException.withMessageContains("positive")));
     }
     
     @Test
     public void fromRangeNull() {
-        exception.expect(NullPointerException.class);
-        IdAllocationRange.fromRange(null);
+        LambdAssert.assertThrows(() -> IdAllocationRange.fromRange(null), AnException.of(NullPointerException.class));
     }
     
     @Test
@@ -84,9 +80,9 @@ public final class TestIdAllocationRange {
             assertThat("allocateNext()", idRange.allocateNext(), equalTo(MIN_VALUE + i));
         }
         assertThat("hasRemaining()", idRange.hasRemaining(), is(false));
-        exception.expect(IllegalStateException.class);
-        exception.expectMessage("exceeded");
-        idRange.allocateNext();
+        LambdAssert.assertThrows(
+            () -> idRange.allocateNext(),
+            AnException.of(IllegalStateException.class).and(AnException.withMessageContains("exceeded")));
     }
     
     @Test
