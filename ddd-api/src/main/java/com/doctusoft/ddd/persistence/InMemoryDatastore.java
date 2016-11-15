@@ -12,7 +12,7 @@ import java.util.*;
 
 import static java.util.Objects.*;
 
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 public class InMemoryDatastore implements GenericPersistence {
     
     private final NavigableMap<KeyWrapper, Entity> entityMap;

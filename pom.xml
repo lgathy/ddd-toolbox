@@ -8,10 +8,11 @@
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Doctusoft Domain-Driven Design Toolbox</name>
-    
+    <name>Domain-Driven Design Toolbox</name>
+
     <modules>
         <module>ddd-api</module>
+        <module>ddd-idsequence</module>
     </modules>
 
     <prerequisites>
@@ -45,7 +46,7 @@
             <url>http://repo.doctusoft.com/nexus/content/repositories/oss-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.jetbrains</groupId>
