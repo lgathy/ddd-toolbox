@@ -13,6 +13,7 @@
     <modules>
         <module>ddd-api</module>
         <module>ddd-idsequence</module>
+        <module>ddd-migration</module>
     </modules>
 
     <prerequisites>
