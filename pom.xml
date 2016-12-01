@@ -14,6 +14,9 @@
         <module>ddd-api</module>
         <module>ddd-idsequence</module>
         <module>ddd-migration</module>
+        <module>ddd-runtime</module>
+        <module>ddd-jpa</module>
+        <module>ddd-jpa-hibernate</module>
     </modules>
 
     <prerequisites>
@@ -69,6 +72,12 @@
                 <groupId>com.doctusoft.toolbox</groupId>
                 <artifactId>java-toolbox</artifactId>
                 <version>0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>

@@ -4,11 +4,12 @@ import com.doctusoft.ddd.model.EntityKey;
 import com.doctusoft.ddd.persistence.GenericPersistence;
 import lombok.RequiredArgsConstructor;
 
+import javax.inject.Inject;
 import java.math.BigInteger;
 
 import static java.util.Objects.*;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class IdSequenceManagerImpl implements IdSequenceManager {
     
     private final GenericPersistence persistence;

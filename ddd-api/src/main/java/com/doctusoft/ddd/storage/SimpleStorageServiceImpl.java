@@ -6,6 +6,7 @@ import com.doctusoft.ddd.persistence.GenericPersistence;
 import com.doctusoft.java.RandomId;
 import lombok.RequiredArgsConstructor;
 
+import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.zip.*;
 import static com.doctusoft.java.Failsafe.checkArgument;
 import static java.util.Objects.*;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class SimpleStorageServiceImpl implements StorageService {
     
     private final GenericPersistence persistence;
