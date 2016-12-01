@@ -16,9 +16,9 @@ public interface Instantiator {
      * @param kind the interface class of the instance we want to create.
      * @param <T>  the generic parameter is not restricted to {@link Entity} types.
      */
-    @NotNull <T> T instantiate(@NotNull Class<T> kind);
+    <T> @NotNull T instantiate(@NotNull Class<T> kind);
     
-    @NotNull default <T> Class<? extends T> getImplementationClass(@NotNull Class<T> kind) {
+    default <T> @NotNull Class<? extends T> getImplementationClass(@NotNull Class<T> kind) {
         requireNonNull(kind, "kind");
         return (Class<? extends T>) instantiate(kind).getClass();
     }
