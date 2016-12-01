@@ -8,25 +8,28 @@
         <groupId>com.doctusoft.toolbox</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>ddd-jpa</artifactId>
-
-    <name>Domain-Driven Design - JPA toolbox</name>
+    <artifactId>ddd-jpa-hibernate</artifactId>
+    
+    <name>Domain-Driven Design - Hibernate Persistence</name>
+    
+    <properties>
+        <version.hibernate>5.2.5.Final</version.hibernate>
+    </properties>
     
     <dependencies>
         <dependency>
             <groupId>com.doctusoft.toolbox</groupId>
-            <artifactId>ddd-api</artifactId>
+            <artifactId>ddd-jpa</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${version.hibernate}</version>
         </dependency>
         <dependency>
             <groupId>com.doctusoft</groupId>
-            <artifactId>guava-java8-extras</artifactId>
+            <artifactId>hibernate-extras</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
