@@ -42,7 +42,7 @@ public class EntityQuery<T extends Entity> {
     @Getter(AccessLevel.NONE)
     private final List<Function<Root, Order>> orders = new ArrayList<>();
     
-    public EntityQuery<T> where(Consumer<EntityCriteria> conditions) {
+    public EntityQuery<T> where(Consumer<EntityCriteria<? super T>> conditions) {
         conditions.accept(criteria);
         return this;
     }
@@ -57,9 +57,11 @@ public class EntityQuery<T extends Entity> {
         return this;
     }
     
-    public TypedQuery<T> query() {
-        return em.createQuery(createCriteriaQuery());
-    }
+    public EntityQuery<T> idAsc() { return asc(Entity.ID); }
+    
+    public EntityQuery<T> idDesc() { return desc(Entity.ID); }
+    
+    public TypedQuery<T> query() { return em.createQuery(createCriteriaQuery()); }
     
     private CriteriaQuery<T> createCriteriaQuery() {
         CriteriaQuery<T> query = criteria.builder().createQuery((Class<T>) entityClass);
@@ -96,9 +98,7 @@ public class EntityQuery<T extends Entity> {
         return Math.toIntExact(result);
     }
     
-    public boolean exists() {
-        return count() > 0;
-    }
+    public boolean exists() { return count() > 0; }
     
     public Optional<T> queryOptionalExpected() {
         List<T> resultList = query()

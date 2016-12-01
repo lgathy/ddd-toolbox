@@ -37,7 +37,7 @@ public class EntityDelete<T extends Entity> {
     
     @NonNull private final CriteriaDelete criteriaDelete;
     
-    public EntityDelete<T> where(Consumer<EntityCriteria> conditions) {
+    public EntityDelete<T> where(Consumer<EntityCriteria<? super T>> conditions) {
         conditions.accept(criteria);
         return this;
     }

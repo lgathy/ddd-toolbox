@@ -41,7 +41,7 @@ public class EntityUpdate<T extends Entity> {
     @Getter(AccessLevel.NONE)
     private final List<Consumer<CriteriaUpdate<T>>> updateActions = new ArrayList<>();
     
-    public EntityUpdate<T> where(Consumer<EntityCriteria> conditions) {
+    public EntityUpdate<T> where(Consumer<EntityCriteria<? super T>> conditions) {
         conditions.accept(criteria);
         return this;
     }
