@@ -2,42 +2,55 @@ package com.doctusoft.ddd.persistence;
 
 import com.doctusoft.ddd.model.Entity;
 import com.doctusoft.ddd.model.EntityKey;
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
 
 import static java.util.Objects.*;
 
-@RequiredArgsConstructor
 public class InMemoryDatastore implements GenericPersistence {
     
+    public static InMemoryDatastore singleThreaded() {
+        return new InMemoryDatastore(TreeMap::new);
+    }
+    
+    public static InMemoryDatastore multiThreaded() {
+        return new InMemoryDatastore(ConcurrentSkipListMap::new);
+    }
+    
     private final NavigableMap<KeyWrapper, Entity> entityMap;
+    
+    public InMemoryDatastore(Supplier<? extends NavigableMap> entityMapFactory) {
+        this.entityMap = entityMapFactory.get();
+    }
     
     @Nullable public <T extends Entity> T load(@NotNull EntityKey<T> key) {
         Entity entity = entityMap.get(new KeyWrapper(key));
         if (entity == null) {
             return null;
         }
-        return encodeEntity((T) entity, key);
+        return encodeEntity((T) entity);
     }
     
     public <T extends Entity> void insert(@NotNull T entity) {
-        EntityKey key = entity.getKey();
-        Entity existing = entityMap.putIfAbsent(new KeyWrapper(key), decodeEntity(entity, key));
+        EntityKey entityKey = entity.getKey();
+        KeyWrapper mapKey = new KeyWrapper(entityKey);
+        Entity existing = entityMap.putIfAbsent(mapKey, decodeEntity(entity));
         if (existing != null) {
-            throw new IllegalStateException("Entity with key " + key + " already exists: " + existing);
+            throw new IllegalStateException("Entity with key " + entityKey + " already exists: " + existing);
         }
     }
     
     public <T extends Entity> void update(@NotNull T entity) {
-        EntityKey key = entity.getKey();
-        Entity nullIfNotExisting = entityMap.computeIfPresent(new KeyWrapper(key), (k, oldValue) -> encodeEntity(entity, key));
+        EntityKey entityKey = entity.getKey();
+        KeyWrapper mapKey = new KeyWrapper(entityKey);
+        Entity nullIfNotExisting = entityMap.computeIfPresent(mapKey, (k, oldValue) -> encodeEntity(entity));
         if (nullIfNotExisting == null) {
-            throw new IllegalStateException("Entity with key " + key + " did not exist");
+            throw new IllegalStateException("Entity with key " + entityKey + " did not exist");
         }
     }
     
@@ -56,13 +69,9 @@ public class InMemoryDatastore implements GenericPersistence {
         return Collections.unmodifiableCollection(entities);
     }
     
-    @NotNull protected <T extends Entity> T decodeEntity(@NotNull T entity, @NotNull EntityKey key) {
-        return entity;
-    }
+    @NotNull protected <T extends Entity> T decodeEntity(@NotNull T entity) { return entity; }
     
-    @NotNull protected <T extends Entity> T encodeEntity(@NotNull T entity, @NotNull EntityKey key) {
-        return entity;
-    }
+    @NotNull protected <T extends Entity> T encodeEntity(@NotNull T entity) { return entity; }
     
     public void evictCache() {
         // nothing to do

@@ -9,8 +9,6 @@ import lombok.Data;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
-
 import static com.doctusoft.java.LambdAssert.assertThrows;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -28,7 +26,7 @@ public class TestIdSequenceManager {
     
     @Before
     public void setup() {
-        persistence = new InMemoryDatastore(new TreeMap<>());
+        persistence = InMemoryDatastore.singleThreaded();
         manager = new IdSequenceManagerImpl(persistence);
         persistence.insert(createSequence());
     }
