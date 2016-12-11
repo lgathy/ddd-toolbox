@@ -8,10 +8,15 @@
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Doctusoft Domain-Driven Design Toolbox</name>
-    
+    <name>Domain-Driven Design Toolbox</name>
+
     <modules>
         <module>ddd-api</module>
+        <module>ddd-idsequence</module>
+        <module>ddd-migration</module>
+        <module>ddd-runtime</module>
+        <module>ddd-jpa</module>
+        <module>ddd-jpa-hibernate</module>
     </modules>
 
     <prerequisites>
@@ -46,12 +51,33 @@
         </snapshotRepository>
     </distributionManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>15.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.10</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.doctusoft.toolbox</groupId>
                 <artifactId>java-toolbox</artifactId>
                 <version>0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>

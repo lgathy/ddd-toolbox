@@ -7,14 +7,21 @@
         <artifactId>ddd-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>ddd-api</artifactId>
+    <artifactId>ddd-idsequence</artifactId>
 
-    <name>Domain-Driven Design API</name>
+    <name>Domain-Driven Design – ID-Sequence Management</name>
 
     <dependencies>
         <dependency>
             <groupId>com.doctusoft.toolbox</groupId>
-            <artifactId>java-toolbox</artifactId>
+            <artifactId>ddd-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.doctusoft.toolbox</groupId>
+            <artifactId>ddd-runtime</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>javax.inject</groupId>
