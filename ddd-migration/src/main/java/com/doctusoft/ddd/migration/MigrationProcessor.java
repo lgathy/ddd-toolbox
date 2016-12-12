@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +20,6 @@ import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
-import java.util.logging.*;
 import java.util.stream.*;
 
 import static com.doctusoft.java.Failsafe.checkArgument;
@@ -27,11 +27,10 @@ import static com.doctusoft.java.Failsafe.checkState;
 import static java.util.Objects.*;
 import static java.util.logging.Level.*;
 
+@Log
 @Value
 @Builder
 public class MigrationProcessor<S, T extends Entity> {
-    
-    private static final Logger log = Logger.getLogger(MigrationProcessor.class.getName());
     
     @NotNull MigrationContext context;
     

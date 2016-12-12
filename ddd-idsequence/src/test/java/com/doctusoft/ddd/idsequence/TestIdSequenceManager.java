@@ -18,7 +18,7 @@ public class TestIdSequenceManager {
     private static final String DEFAULT_ID = "test_entity_id";
     private static final EntityKey<IdSequenceTestdata> DEFAULT_KEY = IdSequenceTestdata.createKey(DEFAULT_ID);
     private static final Long sequenceInitialValue = 1L;
-    private static final Long getSequenceMaxValue = 10L;
+    private static final Long sequenceMaxValue = 10L;
     
     private GenericPersistence persistence;
     
@@ -35,7 +35,7 @@ public class TestIdSequenceManager {
         IdSequenceTestdata entity = new IdSequenceTestdata();
         entity.setId(DEFAULT_ID);
         entity.setLastValue(sequenceInitialValue);
-        entity.setMaxValue(getSequenceMaxValue);
+        entity.setMaxValue(sequenceMaxValue);
         return entity;
     }
     

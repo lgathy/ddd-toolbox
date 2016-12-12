@@ -11,8 +11,7 @@ import static java.util.Objects.*;
 @ToString(doNotUseGetters = true)
 public abstract class EntityClass<T extends Entity> {
     
-    public static <T extends Entity> EntityClass<T> of(@NotNull Class<T> kind) {
-        requireNonNull(kind);
+    public static <T extends Entity> EntityClass<T> of(@NonNull Class<T> kind) {
         if (EntityWithLongId.class.isAssignableFrom(kind)) {
             return new WithLongId(kind);
         }
