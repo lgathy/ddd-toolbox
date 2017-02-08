@@ -13,7 +13,7 @@
     <name>Domain-Driven Design - Hibernate Persistence</name>
     
     <properties>
-        <version.hibernate>5.2.5.Final</version.hibernate>
+        <version.hibernate>5.2.7.Final</version.hibernate>
     </properties>
     
     <dependencies>
