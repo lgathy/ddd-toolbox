@@ -10,7 +10,7 @@
     </parent>
     <artifactId>ddd-runtime</artifactId>
 
-    <name>Domain-Driven Design - Runtime</name>
+    <name>Domain-Driven Design – Runtime</name>
     
     <dependencies>
         <dependency>

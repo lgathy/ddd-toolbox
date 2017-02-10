@@ -10,7 +10,7 @@
     </parent>
     <artifactId>ddd-jpa</artifactId>
 
-    <name>Domain-Driven Design - JPA toolbox</name>
+    <name>Domain-Driven Design – JPA toolbox</name>
     
     <dependencies>
         <dependency>

@@ -10,7 +10,7 @@
     </parent>
     <artifactId>ddd-jpa-hibernate</artifactId>
     
-    <name>Domain-Driven Design - Hibernate Persistence</name>
+    <name>Domain-Driven Design – Hibernate Persistence</name>
     
     <properties>
         <version.hibernate>5.2.7.Final</version.hibernate>

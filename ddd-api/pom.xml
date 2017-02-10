@@ -9,7 +9,7 @@
     </parent>
     <artifactId>ddd-api</artifactId>
 
-    <name>Domain-Driven Design API</name>
+    <name>Domain-Driven Design – API</name>
 
     <dependencies>
         <dependency>
