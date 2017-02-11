@@ -100,6 +100,14 @@ public class EntityQuery<T extends Entity> {
     
     public boolean exists() { return count() > 0; }
     
+    public Optional<T> queryFirstResult() {
+        List<T> resultList = query()
+            .setMaxResults(1)
+            .getResultList();
+        if (resultList.isEmpty()) return Optional.empty();
+        return Optional.of(resultList.get(0));
+    }
+    
     public Optional<T> queryOptionalExpected() {
         List<T> resultList = query()
             .setMaxResults(2)
