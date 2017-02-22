@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
+import javax.persistence.TypedQuery;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -81,23 +82,27 @@ public abstract class JpaPersistence implements GenericPersistence {
         return EntityQuery.create(em, kind, implementationClass);
     }
     
-    protected static <T extends Entity, U> PagedList<U> loadPage(@NotNull EntityQuery<T> query, @NotNull PageToken pageToken, @NotNull Function<? super T, U> mapperFun) {
-        requireNonNull(query, "query");
+    protected static <T extends Entity> PagedList<T> loadPage(@NotNull EntityQuery<T> entityQuery, @NotNull PageToken pageToken) {
+        return loadPage(entityQuery, pageToken, Function.identity());
+    }
+    
+    protected static <T extends Entity, U> PagedList<U> loadPage(@NotNull EntityQuery<T> entityQuery, @NotNull PageToken pageToken, @NotNull Function<? super T, U> mapperFun) {
+        requireNonNull(entityQuery, "entityQuery");
         requireNonNull(pageToken, "pageToken");
         requireNonNull(mapperFun, "mapperFun");
-        int totalRowCount = query.count();
-        List<U> pageRows = new ArrayList<>();
-        if (pageToken.getFrom() < totalRowCount) {
-            pageRows = query
-                .query()
-                .setFirstResult(pageToken.getFrom())
-                .setMaxResults(pageToken.getLimit())
-                .getResultList()
-                .stream()
-                .map(mapperFun)
-                .collect(Collectors.toList());
+        PagedList<U> page = new PagedList<>(new ArrayList<>(), entityQuery.count());
+        TypedQuery<T> typedQuery = entityQuery.query();
+        if (pageToken.getFrom() >= page.getTotalRowCount()) return page;
+        if (!pageToken.equals(PageToken.unpaged())) {
+            typedQuery.setFirstResult(pageToken.getFrom());
+            typedQuery.setMaxResults(pageToken.getLimit());
         }
-        return new PagedList<>(pageRows, totalRowCount);
+        if (mapperFun == Function.identity()) {
+            page.setPageRows((List<U>) typedQuery.getResultList());
+        } else {
+            page.setPageRows(typedQuery.getResultList().stream().map(mapperFun).collect(Collectors.toList()));
+        }
+        return page;
     }
     
     protected void mergeIfUnmanaged(Entity entity) {

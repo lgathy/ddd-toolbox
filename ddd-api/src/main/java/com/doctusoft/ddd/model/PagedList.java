@@ -10,6 +10,8 @@ import java.util.*;
 @AllArgsConstructor
 public final class PagedList<T> implements PagedResponse<T>, Serializable {
     
+    public static <T> PagedList<T> empty() { return new PagedList<>(Collections.emptyList(), 0); }
+    
     private List<T> pageRows;
     
     private int totalRowCount;
