@@ -11,12 +11,13 @@ import org.jetbrains.annotations.Nullable;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
-import javax.persistence.TypedQuery;
-import java.util.*;
-import java.util.function.*;
-import java.util.stream.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static java.util.Objects.*;
+import static java.util.Objects.requireNonNull;
 
 public abstract class JpaPersistence implements GenericPersistence {
     
@@ -90,19 +91,23 @@ public abstract class JpaPersistence implements GenericPersistence {
         requireNonNull(entityQuery, "entityQuery");
         requireNonNull(pageToken, "pageToken");
         requireNonNull(mapperFun, "mapperFun");
-        PagedList<U> page = new PagedList<>(new ArrayList<>(), entityQuery.count());
-        TypedQuery<T> typedQuery = entityQuery.query();
-        if (pageToken.getFrom() >= page.getTotalRowCount()) return page;
-        if (!pageToken.equals(PageToken.unpaged())) {
-            typedQuery.setFirstResult(pageToken.getFrom());
-            typedQuery.setMaxResults(pageToken.getLimit());
-        }
-        if (mapperFun == Function.identity()) {
-            page.setPageRows((List<U>) typedQuery.getResultList());
+        if (pageToken.equals(PageToken.unpaged())) {
+            List<T> results = entityQuery.query().getResultList();
+            return new PagedList<>(mapResults(results, mapperFun), results.size());
         } else {
-            page.setPageRows(typedQuery.getResultList().stream().map(mapperFun).collect(Collectors.toList()));
+            List<T> results = entityQuery.query()
+                .setFirstResult(pageToken.getFrom())
+                .setMaxResults(pageToken.getLimit())
+                .getResultList();
+            return new PagedList<>(mapResults(results, mapperFun), entityQuery.count());
         }
-        return page;
+    }
+    
+    private static <T, U> List<U> mapResults(List<T> results, @NotNull Function<? super T, U> mapperFun) {
+        if (mapperFun == Function.identity()) {
+            return (List<U>) results;
+        }
+        return results.stream().map(mapperFun).collect(Collectors.toList());
     }
     
     protected void mergeIfUnmanaged(Entity entity) {
