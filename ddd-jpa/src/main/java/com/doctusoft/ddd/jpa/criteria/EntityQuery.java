@@ -32,7 +32,7 @@ public class EntityQuery<T extends Entity> {
         return new EntityQuery<>(em, entityClass, criteria);
     }
     
-    @Getter(AccessLevel.NONE)
+    @Getter(AccessLevel.PACKAGE)
     private final EntityManager em;
     
     private final Class<? extends T> entityClass;
@@ -76,7 +76,7 @@ public class EntityQuery<T extends Entity> {
         applyOrderBy(query, entity);
     }
     
-    private void applyOrderBy(CriteriaQuery query, Root<? extends T> entity) {
+    void applyOrderBy(CriteriaQuery query, Root<? extends T> entity) {
         if (orders.size() > 0) {
             query.orderBy(orders
                 .stream()

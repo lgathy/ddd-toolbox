@@ -24,7 +24,7 @@ public final class EntityCriteria<T extends Entity> {
     
     @NonNull private final CriteriaBuilder builder;
     
-    @Getter(AccessLevel.NONE)
+    @Getter(AccessLevel.PACKAGE)
     private final List<Function<Root, Predicate>> conditions = new ArrayList<>();
     
     public EntityCriteria<T> addCondition(Function<Root, Predicate> condition) {

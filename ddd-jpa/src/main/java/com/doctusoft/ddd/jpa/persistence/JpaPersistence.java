@@ -1,5 +1,6 @@
 package com.doctusoft.ddd.jpa.persistence;
 
+import com.doctusoft.ddd.jpa.criteria.CustomQuery;
 import com.doctusoft.ddd.jpa.criteria.EntityQuery;
 import com.doctusoft.ddd.model.*;
 import com.doctusoft.ddd.persistence.GenericPersistence;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
+import javax.persistence.Tuple;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -100,6 +102,24 @@ public abstract class JpaPersistence implements GenericPersistence {
                 .setMaxResults(pageToken.getLimit())
                 .getResultList();
             return new PagedList<>(mapResults(results, mapperFun), entityQuery.count());
+        }
+    }
+    
+    protected static <T extends Entity, U> PagedList<U> loadPage(@NotNull CustomQuery<T, U> customQuery, @NotNull PageToken pageToken) {
+        requireNonNull(customQuery, "customQuery");
+        requireNonNull(pageToken, "pageToken");
+        if (pageToken.equals(PageToken.unpaged())) {
+            List<Tuple> results = customQuery.createCustomQuery().getResultList();
+            return new PagedList<>(mapResults(results, customQuery::mapResult), results.size());
+        } else {
+            int totalRowCount = customQuery.isDecorateResultsOnly()
+                ? customQuery.getEntityQuery().count()
+                : customQuery.count();
+            List<Tuple> results = customQuery.createCustomQuery()
+                .setFirstResult(pageToken.getFrom())
+                .setMaxResults(pageToken.getLimit())
+                .getResultList();
+            return new PagedList<>(mapResults(results, customQuery::mapResult), totalRowCount);
         }
     }
     
