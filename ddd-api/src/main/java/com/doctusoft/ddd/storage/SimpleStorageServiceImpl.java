@@ -135,11 +135,11 @@ public class SimpleStorageServiceImpl implements StorageService {
     
     public FileDownloadResponse download(EntityKey<StorageObject> key) {
         StorageObject storageObject = persistence.require(key);
-        FileDownloadResponse response = new FileDownloadResponse();
-        response.setFileName(storageObject.getFileName());
-        response.setMimeType(storageObject.getMimeType());
-        response.setContent(getDownloadContent(storageObject));
-        return response;
+        return FileDownloadResponse.builder()
+            .fileName(storageObject.getFileName())
+            .mimeType(storageObject.getMimeType())
+            .content(getDownloadContent(storageObject))
+            .build();
     }
     
     protected byte[] getDownloadContent(StorageObject storageObject) {
