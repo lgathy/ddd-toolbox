@@ -7,15 +7,15 @@ import com.doctusoft.java.RandomId;
 import lombok.RequiredArgsConstructor;
 
 import javax.inject.Inject;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.*;
-import java.util.zip.*;
+import java.util.Collection;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import static com.doctusoft.java.Failsafe.checkArgument;
-import static java.util.Objects.*;
+import static java.util.Objects.requireNonNull;
 
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class SimpleStorageServiceImpl implements StorageService {
@@ -121,18 +121,6 @@ public class SimpleStorageServiceImpl implements StorageService {
         }
     }
     
-    protected byte[] compress(byte[] uncompressed) {
-        try (ByteArrayOutputStream buffer = new ByteArrayOutputStream(getBufferSize(uncompressed.length));
-            GZIPOutputStream zipStream = new GZIPOutputStream(buffer)) {
-            zipStream.write(uncompressed);
-            zipStream.finish();
-            zipStream.flush();
-            return buffer.toByteArray();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
     public FileDownloadResponse download(EntityKey<StorageObject> key) {
         StorageObject storageObject = persistence.require(key);
         return FileDownloadResponse.builder()
@@ -151,35 +139,14 @@ public class SimpleStorageServiceImpl implements StorageService {
         }
     }
     
-    protected byte[] decompress(byte[] compressed, long uncompressedSize) {
-        int bufferSize = getBufferSize(uncompressedSize);
-        try (ByteArrayOutputStream buffer = new ByteArrayOutputStream(bufferSize);
-            GZIPInputStream zipStream = new GZIPInputStream(new ByteArrayInputStream(compressed))) {
-            byte[] buf = new byte[bufferSize];
-            while (true) {
-                int r = zipStream.read(buf);
-                if (r == -1) {
-                    break;
-                }
-                buffer.write(buf, 0, r);
-            }
-            return buffer.toByteArray();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    protected byte[] compress(byte[] uncompressed) {
+        return StorageService.compress(uncompressed);
     }
     
-    protected int getBufferSize(long exactSize) {
-        checkArgument(exactSize >= 0, () -> "Negative size: " + exactSize);
-        int bufferSize = getBufferSize();
-        if (exactSize > (long) bufferSize) {
-            return bufferSize;
-        }
-        return (int) exactSize;
+    protected byte[] decompress(byte[] compressed, long uncompressedSize) {
+        return StorageService.decompress(compressed, uncompressedSize);
     }
     
     protected int getBufferSize() { return DEFAULT_BUFFER_SIZE; }
-    
-    private static final int DEFAULT_BUFFER_SIZE = 1 << 16; // 64kB
     
 }
