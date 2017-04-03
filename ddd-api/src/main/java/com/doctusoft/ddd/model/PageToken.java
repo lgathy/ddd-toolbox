@@ -24,7 +24,14 @@ public class PageToken implements Serializable {
     
     private int limit;
     
-    public PageToken() {}
+    /**
+     * The default constructor should never be used directly. Use factory methods instead.
+     *
+     * @see #create(int, int)
+     * @see #firstPage(int)
+     * @see #unpaged()
+     */
+    private PageToken() {}
     
     public PageToken(int from, int limit) {
         this.from = from;
