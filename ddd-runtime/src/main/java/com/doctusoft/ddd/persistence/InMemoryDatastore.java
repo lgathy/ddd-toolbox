@@ -33,13 +33,13 @@ public class InMemoryDatastore implements GenericPersistence {
         if (entity == null) {
             return null;
         }
-        return encodeEntity((T) entity);
+        return decodeEntity((T) entity);
     }
     
     public <T extends Entity> void insert(@NotNull T entity) {
         EntityKey entityKey = entity.getKey();
         KeyWrapper mapKey = new KeyWrapper(entityKey);
-        Entity existing = entityMap.putIfAbsent(mapKey, decodeEntity(entity));
+        Entity existing = entityMap.putIfAbsent(mapKey, encodeEntity(entity));
         if (existing != null) {
             throw new IllegalStateException("Entity with key " + entityKey + " already exists: " + existing);
         }
