@@ -35,10 +35,15 @@ public abstract class HibernatePersistence extends JpaPersistence {
             newEntities.forEach(this::insert);
             return;
         }
+        int multiLineInsertLimit = getMultiLineInsertLimit(kind);
+        if (multiLineInsertLimit < 10) {
+            newEntities.forEach(this::insert);
+            return;
+        }
         em.flush();
         Session session = em.unwrap(Session.class);
         Iterables
-            .partition(newEntities, getMultiLineInsertLimit(kind))
+            .partition(newEntities, multiLineInsertLimit)
             .forEach(partition -> multiLineInsertSupport.insertInBatch(session, partition.toArray()));
     }
     
