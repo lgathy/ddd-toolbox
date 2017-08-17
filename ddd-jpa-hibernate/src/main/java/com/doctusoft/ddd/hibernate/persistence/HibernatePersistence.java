@@ -1,5 +1,6 @@
 package com.doctusoft.ddd.hibernate.persistence;
 
+import com.doctusoft.ddd.jpa.criteria.EntityQuery;
 import com.doctusoft.ddd.jpa.persistence.JpaPersistence;
 import com.doctusoft.ddd.model.Entity;
 import com.doctusoft.hibernate.extras.HibernateMultiLineInsert;
@@ -8,9 +9,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.internal.StatelessSessionImpl;
 import org.hibernate.persister.entity.EntityPersister;
+import org.hibernate.query.Query;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.persistence.TypedQuery;
 import java.util.*;
 import java.util.function.*;
 
@@ -54,6 +57,14 @@ public abstract class HibernatePersistence extends JpaPersistence {
         StatelessSessionImpl session = (StatelessSessionImpl) sessionFactory.openStatelessSession();
         EntityPersister persister = session.getEntityPersister(null, entity);
         return HibernateMultiLineInsert.lookup(persister);
+    }
+    
+    protected static <T> @NotNull org.hibernate.query.Query<T> unwrap(TypedQuery<T> typedQuery) {
+        return (org.hibernate.query.Query<T>) typedQuery.unwrap(Query.class);
+    }
+    
+    protected static <T extends Entity> @NotNull Query<T> unwrap(EntityQuery<T> query) {
+        return unwrap(query.query());
     }
     
 }
