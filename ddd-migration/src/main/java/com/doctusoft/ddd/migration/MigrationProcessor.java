@@ -24,6 +24,7 @@ import java.util.stream.*;
 
 import static com.doctusoft.java.Failsafe.checkArgument;
 import static com.doctusoft.java.Failsafe.checkState;
+import static java.lang.String.valueOf;
 import static java.util.Objects.*;
 import static java.util.logging.Level.*;
 
@@ -142,10 +143,19 @@ public class MigrationProcessor<S, T extends Entity> {
     }
     
     public void runFullMigration() {
+        String target = getIncrementalLogId();
         MigrationStep initialStep = initialize();
         Optional<MigrationStep> nextStep = run(initialStep);
+        int batchCount = 1;
         while (nextStep.isPresent()) {
-            nextStep = run(nextStep.get());
+            batchCount++;
+            MigrationStep step = nextStep.get();
+            Object dbCursor = step.getBatchOption().getDbCursor();
+            log.info(target + " migration: starting " + batchCount + ". batch from cursor: " + valueOf(dbCursor));
+            nextStep = run(step);
+        }
+        if (batchCount > 1) {
+            log.info("Total batch count for " + target + " migration was " + batchCount);
         }
     }
     
@@ -162,7 +172,7 @@ public class MigrationProcessor<S, T extends Entity> {
                     if (targetEntity != null) {
                         Object targetEntityId = targetEntity.getId();
                         if (!id.equals(targetEntityId)) {
-                            throw new IllegalStateException("targetEntity.id: " + String.valueOf(targetEntityId));
+                            throw new IllegalStateException("targetEntity.id: " + valueOf(targetEntityId));
                         }
                         if (existing == null) {
                             targetActions.addInsert(targetEntity);
@@ -217,7 +227,7 @@ public class MigrationProcessor<S, T extends Entity> {
                 persistence.update(entry);
             }
         }
-        log.info(() -> targetEntity.getSimpleName() + " migration finished");
+        log.info(() -> getIncrementalLogId() + " migration finished");
         return Optional.empty();
     }
     
@@ -441,7 +451,7 @@ public class MigrationProcessor<S, T extends Entity> {
         }
         
         public void logStatistics() {
-            log.info(() -> "Migration batch stats: count(sourceEntities)=" + countSource + ", inserted=" + countInsert 
+            log.info(() -> "Migration batch stats: count(sourceEntities)=" + countSource + ", inserted=" + countInsert
                 + ", updated=" + countUpdate + ", ignored=" + countIgnore + ", failed=" + countFailed);
         }
     }
