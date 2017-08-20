@@ -34,11 +34,18 @@
         <version.maven.deploy.plugin>2.8.2</version.maven.deploy.plugin>
         <version.maven.install.plugin>2.5.2</version.maven.install.plugin>
         <version.maven.jar.plugin>2.5</version.maven.jar.plugin>
-        <version.maven.release.plugin>2.5.1</version.maven.release.plugin>
+        <version.maven.release.plugin>2.5.3</version.maven.release.plugin>
         <version.maven.resources.plugin>2.7</version.maven.resources.plugin>
         <version.maven.source.plugin>2.4</version.maven.source.plugin>
         <version.maven.surefire.plugin>2.18</version.maven.surefire.plugin>
     </properties>
+
+    <scm>
+        <connection>scm:git:https://github.com/lgathy/ddd-toolbox.git</connection>
+        <developerConnection>scm:git:https://github.com/lgathy/ddd-toolbox.git</developerConnection>
+        <url>https://github.com/lgathy/ddd-toolbox</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <distributionManagement>
         <repository>
@@ -85,7 +92,7 @@
             <dependency>
                 <groupId>com.doctusoft.toolbox</groupId>
                 <artifactId>java-toolbox</artifactId>
-                <version>0.1-SNAPSHOT</version>
+                <version>0.1</version>
             </dependency>
             <dependency>
                 <groupId>javax.inject</groupId>
