@@ -35,7 +35,8 @@ public class EntityKey<T extends Entity> {
     }
     
     public static <T extends EntityWithLongId> EntityKey<T> parseLongId(Class<T> kind, String idString) {
-        return new EntityKey<>(kind, Long.valueOf(idString), idString);
+        Long id = Long.valueOf(idString);
+        return new EntityKey<>(kind, id, id.toString());
     }
     
     public static <T extends EntityWithCustomId> EntityKey<T> parseCustomId(Class<T> kind, String idString) {
