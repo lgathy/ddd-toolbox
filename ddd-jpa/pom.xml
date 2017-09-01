@@ -27,7 +27,7 @@
         <dependency>
             <groupId>com.doctusoft</groupId>
             <artifactId>guava-java8-extras</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>0.1</version>
         </dependency>
     </dependencies>
 
