@@ -8,4 +8,9 @@ public class JpaMultipleLinesConverter extends GenericJpaConverter<List<String>,
     
     public JpaMultipleLinesConverter() { super(MultipleLinesConverter.INSTANCE); }
     
+    public String convertToDatabaseColumn(List<String> attribute) {
+        if (attribute == null|| attribute.isEmpty()) return null;
+        return super.convertToDatabaseColumn(attribute);
+    }
+    
 }

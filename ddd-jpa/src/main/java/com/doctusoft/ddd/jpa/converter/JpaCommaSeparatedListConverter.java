@@ -8,4 +8,9 @@ public class JpaCommaSeparatedListConverter extends GenericJpaConverter<List<Str
     
     public JpaCommaSeparatedListConverter() { super(CommaSeparatedListConverter.INSTANCE); }
     
+    public String convertToDatabaseColumn(List<String> attribute) {
+        if (attribute == null|| attribute.isEmpty()) return null;
+        return super.convertToDatabaseColumn(attribute);
+    }
+    
 }
