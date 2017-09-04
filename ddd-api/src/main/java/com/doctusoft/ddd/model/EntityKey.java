@@ -2,13 +2,15 @@ package com.doctusoft.ddd.model;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 import static com.doctusoft.java.Failsafe.checkArgument;
 import static java.util.Objects.*;
 
 @Value
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(doNotUseGetters = true, exclude = "idAsString")
-public class EntityKey<T extends Entity> {
+public class EntityKey<T extends Entity> implements Serializable {
     
     @NonNull Class<T> kind;
     
