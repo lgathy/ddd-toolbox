@@ -47,17 +47,6 @@
         <tag>HEAD</tag>
     </scm>
 
-    <distributionManagement>
-        <repository>
-            <id>doctusoft.releases</id>
-            <url>http://repo.doctusoft.com/nexus/content/repositories/oss</url>
-        </repository>
-        <snapshotRepository>
-            <id>doctusoft.snapshots</id>
-            <url>http://repo.doctusoft.com/nexus/content/repositories/oss-snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <repositories>
         <repository>
             <id>doctusoft-oss</id>
