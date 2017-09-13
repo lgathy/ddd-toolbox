@@ -436,7 +436,7 @@ public class MigrationProcessor<S, T extends Entity> {
             @Nullable Entity existingEntity) {
             
             MigrationError errorLog = instantiator.instantiate(MigrationError.class);
-            errorLog.setId(UUID.randomUUID().toString());
+            errorLog.setId(RandomId.sequential());
             errorLog.setCreatedAt(Instant.now());
             errorLog.setMigrationId(migration.getMigrationId());
             errorLog.setTargetEntity(migration.getTargetEntity().getShortName());
