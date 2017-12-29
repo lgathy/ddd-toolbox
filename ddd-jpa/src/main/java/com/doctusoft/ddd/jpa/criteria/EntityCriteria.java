@@ -80,7 +80,7 @@ public final class EntityCriteria<T extends Entity> {
     }
     
     Function<Root, Expression<String>> idToString() {
-        return root -> builder.toString(root.get(Entity.ID));
+        return root -> root.get(Entity.ID).as(String.class);
     }
     
     public EntityCriteria<T> idEquals(Object value) {
