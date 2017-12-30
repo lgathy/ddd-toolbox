@@ -74,7 +74,7 @@ public final class EntityCriteria<T extends Entity> {
         return like(attributeName, prefix + "%");
     }
     
-    Function<Root, ? extends Expression<String>> id() {
+    Function<Root, ? extends Expression<String>> idAsString() {
         if (entityClass.hasStringId()) return get(Entity.ID);
         return idToString();
     }
@@ -85,12 +85,12 @@ public final class EntityCriteria<T extends Entity> {
     
     public EntityCriteria<T> idEquals(Object value) {
         entityClass.checkId(value);
-        return filterId(id -> builder.equal(id, value));
+        return addCondition(root -> builder.equal(root.get(Entity.ID), value));
     }
     
     public EntityCriteria<T> idIn(Collection<?> ids) {
         ids.forEach(entityClass::checkId);
-        return filterId(id -> id.in(ids));
+        return addCondition(root -> root.get(Entity.ID).in(ids));
     }
     
     public EntityCriteria<T> idInNumericRange(ClosedRange<Long> idRange) {
@@ -104,18 +104,14 @@ public final class EntityCriteria<T extends Entity> {
     }
     
     public EntityCriteria<T> idLike(String idPattern) {
-        return filterId(id -> builder.like(id, idPattern));
+        return addCondition(idAsString().andThen(id -> builder.like(id, idPattern)));
     }
     
     public EntityCriteria<T> idStartsWith(String idPrefix) { return idLike(idPrefix + "%"); }
     
     public EntityCriteria<T> compareId(BiFunction<Expression, Comparable, Predicate> operator, Comparable value) {
         entityClass.checkId(value);
-        return filterId(id -> operator.apply(id, value));
-    }
-    
-    public EntityCriteria<T> filterId(Function<Expression<String>, Predicate> idFilter) {
-        return addCondition(id().andThen(idFilter));
+        return addCondition(root -> operator.apply(root.get(Entity.ID), value));
     }
     
 }
