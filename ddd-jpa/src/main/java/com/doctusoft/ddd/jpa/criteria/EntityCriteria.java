@@ -109,7 +109,7 @@ public final class EntityCriteria<T extends Entity> {
     
     public EntityCriteria<T> idStartsWith(String idPrefix) { return idLike(idPrefix + "%"); }
     
-    public EntityCriteria<T> compareId(BiFunction<Expression, Comparable, Predicate> operator, Comparable value) {
+    public <C extends Comparable> EntityCriteria<T> compareId(BiFunction<Expression, C, Predicate> operator, C value) {
         entityClass.checkId(value);
         return addCondition(root -> operator.apply(root.get(Entity.ID), value));
     }
