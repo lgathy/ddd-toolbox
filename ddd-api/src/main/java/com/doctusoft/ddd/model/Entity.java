@@ -1,6 +1,7 @@
 package com.doctusoft.ddd.model;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.*;
@@ -86,7 +87,7 @@ public interface Entity {
      */
     String getIdAsString();
     
-    default <T> void checkAttributeEquals(@NotNull String field, @NotNull Supplier<T> getter, @NotNull T expected) {
+    default <T> void checkAttributeEquals(@NotNull String field, @NotNull Supplier<T> getter, @Nullable T expected) {
         requireNonNull(field);
         T actual = getter.get();
         checkState(Objects.equals(actual, expected),
