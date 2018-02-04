@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.criteria.*;
 import javax.persistence.criteria.Predicate;
@@ -63,6 +64,18 @@ public final class EntityCriteria<T extends Entity> {
     public EntityCriteria<T> equalTo(String attributeName, Object value) {
         requireNonNull(value);
         return filter(attributeName, attr -> builder.equal(attr, value));
+    }
+    
+    public EntityCriteria<T> equalToNullSafe(String attributeName, @Nullable Object value) {
+        return value == null ? isNull(attributeName) : equalTo(attributeName, value);
+    }
+    
+    public EntityCriteria<T> isNull(String attributeName) {
+        return filter(attributeName, builder::isNull);
+    }
+    
+    public EntityCriteria<T> isNotNull(String attributeName) {
+        return filter(attributeName, builder::isNotNull);
     }
     
     public EntityCriteria<T> like(String attributeName, String pattern) {
