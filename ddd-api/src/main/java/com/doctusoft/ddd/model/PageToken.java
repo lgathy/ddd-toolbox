@@ -10,6 +10,8 @@ import static com.doctusoft.java.Failsafe.checkArgument;
 @Data
 public class PageToken implements Serializable {
     
+    public static final PageToken countOnly() { return new PageToken(0, 0); }
+    
     public static final PageToken unpaged() { return new PageToken(0, Integer.MAX_VALUE); }
     
     public static final PageToken create(int from, int limit) {

@@ -13,8 +13,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.Tuple;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -97,7 +96,7 @@ public abstract class JpaPersistence implements GenericPersistence {
             List<T> results = entityQuery.query().getResultList();
             return new PagedList<>(mapResults(results, mapperFun), results.size());
         } else {
-            List<T> results = entityQuery.query()
+            List<T> results = pageToken.getLimit() == 0 ? new ArrayList<>() : entityQuery.query()
                 .setFirstResult(pageToken.getFrom())
                 .setMaxResults(pageToken.getLimit())
                 .getResultList();
