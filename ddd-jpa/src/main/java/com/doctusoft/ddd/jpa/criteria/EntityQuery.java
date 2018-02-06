@@ -5,6 +5,7 @@ import com.doctusoft.ddd.model.EntityClass;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.EntityManager;
@@ -42,6 +43,9 @@ public class EntityQuery<T extends Entity> {
     @Getter(AccessLevel.NONE)
     private final List<Function<Root, Order>> orders = new ArrayList<>();
     
+    @Setter
+    private boolean lockForUpdate;
+    
     public EntityQuery<T> where(Consumer<EntityCriteria<? super T>> conditions) {
         conditions.accept(criteria);
         return this;
@@ -61,7 +65,13 @@ public class EntityQuery<T extends Entity> {
     
     public EntityQuery<T> idDesc() { return desc(Entity.ID); }
     
-    public TypedQuery<T> query() { return em.createQuery(createCriteriaQuery()); }
+    public TypedQuery<T> query() {
+        TypedQuery<T> query = em.createQuery(createCriteriaQuery());
+        if (lockForUpdate) {
+            query.setLockMode(LockModeType.PESSIMISTIC_WRITE);
+        }
+        return query;
+    }
     
     private CriteriaQuery<T> createCriteriaQuery() {
         CriteriaQuery<T> query = criteria.builder().createQuery((Class<T>) entityClass);
@@ -86,7 +96,8 @@ public class EntityQuery<T extends Entity> {
     }
     
     public TypedQuery<T> selectForUpdate() {
-        return query().setLockMode(LockModeType.PESSIMISTIC_WRITE);
+        lockForUpdate = true;
+        return query();
     }
     
     public int count() {
