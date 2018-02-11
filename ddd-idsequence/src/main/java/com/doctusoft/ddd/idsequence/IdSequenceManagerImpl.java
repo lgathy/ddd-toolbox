@@ -19,7 +19,7 @@ public class IdSequenceManagerImpl implements IdSequenceManager {
         if (count <= 0) {
             throw new IllegalArgumentException("count=" + count + " for key: " + key);
         }
-        IdSequence idSequence = persistence.require(key);
+        IdSequence idSequence = persistence.requireForUpdate(key);
         BigInteger last = BigInteger.valueOf(idSequence.getLastValue());
         long lowerBound = last.add(BigInteger.ONE).longValueExact();
         long upperBound = last.add(BigInteger.valueOf(count)).longValueExact();
