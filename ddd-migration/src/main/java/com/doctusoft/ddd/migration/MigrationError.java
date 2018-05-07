@@ -37,7 +37,7 @@ public interface MigrationError extends EntityWithStringId, CreatedAt {
     
     String getExceptionStacktrace();
     
-    void setExceptionStacktrace(String value);
+    void setExceptionStacktrace(String exceptionStacktrace);
     
     Boolean getExistingEntity();
     

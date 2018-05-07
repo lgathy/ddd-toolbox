@@ -25,4 +25,8 @@ public final class PagedList<T> implements PagedResponse<T>, Serializable {
         return new PagedList<>(pageRows.stream().map(mapperFun).collect(Collectors.toList()), totalRowCount);
     }
     
+    public Stream<T> stream() {
+        return pageRows.stream();
+    }
+    
 }
